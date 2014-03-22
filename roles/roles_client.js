@@ -15,10 +15,10 @@
 //
 // Use a semi-private variable rather than declaring Handlebars
 // helpers directly so that we can unit test the helpers.
-// XXX For some reason, the Handlebars helpers are not registered 
+// XXX For some reason, the Handlebars helpers are not registered
 // before the tests run.
 //
-Roles._handlebarsHelpers = {
+Roles._uiHelpers = {
 
   /**
    * Handlebars helper to check if current user is in at least one
@@ -39,7 +39,7 @@ Roles._handlebarsHelpers = {
    * @param {String} [group] Optional, name of group to check
    * @return {Boolean} true if current user is in at least one of the target roles
    * @static
-   * @for HandlebarsHelpers 
+   * @for HandlebarsHelpers
    */
   isInRole: function (role, group) {
     var user = Meteor.user(),
@@ -70,12 +70,12 @@ Roles._handlebarsHelpers = {
 }
 
 
-if ('undefined' !== typeof Handlebars) {
-  _.each(Roles._handlebarsHelpers, function (func, name) {
-    Handlebars.registerHelper(name, func)
+if (typeof UI !== "undefined") {
+  _.each(Roles._uiHelpers, function (func, name) {
+    UI.registerHelper(name, func)
   })
 } else {
-  console.log('WARNING: Roles Handlebars helpers not registered. Handlebars not defined')
+  console.log('WARNING: Roles UI not registered. UI not defined')
 }
 
 }());

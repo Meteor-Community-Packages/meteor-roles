@@ -4,9 +4,9 @@ Package.describe({
 
 Package.on_use(function (api) {
   var both = ['client', 'server'];
-  api.use(['underscore', 'handlebars', 'accounts-base'], both);
+  api.use(['underscore', 'ui', 'accounts-base'], both);
 
-  api.export && api.export('Roles'); 
+  api.export && api.export('Roles');
 
   api.add_files('roles_server.js', 'server');
   api.add_files('roles_common.js', both);
