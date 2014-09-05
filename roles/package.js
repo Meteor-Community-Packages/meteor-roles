@@ -19,7 +19,7 @@ Package.on_use(function (api) {
     api.use(['ui'], 'client', {weak: true});
   }
   
-  api.use(['blaze'], 'client', {weak: true});
+  api.use(['blaze@2.0.0'], 'client', {weak: true});
 
   api.export && api.export('Roles');
 
