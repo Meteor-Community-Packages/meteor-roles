@@ -18,6 +18,8 @@ Package.on_use(function (api) {
   if(uiExists()) {
     api.use(['ui'], 'client', {weak: true});
   }
+  
+  api.use(['blaze'], 'client', {weak: true});
 
   api.export && api.export('Roles');
 
