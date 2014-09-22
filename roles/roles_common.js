@@ -255,6 +255,43 @@ _.extend(Roles, {
   },
 
   /**
+   * Check if the current user has specified role(s)
+   *
+   * @example
+   *     // same usage style as userIsInRole
+   *     Roles.isInRole('admin')
+   *     Roles.isInRole(['editor','manager'], 'site-content')
+   *     // ...
+   *
+   *     // using has() function alias:
+   *     Roles.has('admin')
+   *
+   * @method isInRole
+   * @param {String|Array} roles Name of role/permission or Array of
+   *                            roles/permissions to check against.  If array,
+   *                            will return true if user is in _any_ role.
+   * @param {String} [group] Optional. Name of group.  If supplied, limits check
+   *                         to just that group.
+   *                         The user's Roles.GLOBAL_GROUP will always be checked
+   *                         whether group is specified or not.
+   * @return {Boolean} true if user is in _any_ of the target roles
+   */
+  isInRole: function (roles, group) {
+    var currentUser;
+    try {
+      currentUser = Meteor.user()
+    } catch (err) {
+      var publishUserMsg = 'Meteor.userId can only be invoked in method calls. Use this.userId in publish functions.';
+      if (err.name === 'Error' && err.message === publishUserMsg) {
+        var msg = 'This method can only be invoked in method calls. Use Roles.userIsInRole(this.userId, roles) in publications.';
+        throw new Error(msg);
+      }
+    }
+    return Roles.userIsInRole(currentUser, roles, group);
+  },
+  has: function (roles, group) { return Roles.isInRole(roles, group); },
+
+  /**
    * Check if user has specified permissions/roles
    *
    * @example
