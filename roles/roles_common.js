@@ -281,11 +281,13 @@ _.extend(Roles, {
     try {
       currentUser = Meteor.user()
     } catch (err) {
-      var publishUserMsg = 'Meteor.userId can only be invoked in method calls. Use this.userId in publish functions.';
-      if (err.name === 'Error' && err.message === publishUserMsg) {
-        var msg = 'This method can only be invoked in method calls. Use Roles.userIsInRole(this.userId, roles) in publications.';
-        throw new Error(msg);
+      if (!DDP._CurrentInvocation.get()) {
+        throw new Error(
+          'This method can only be invoked in method calls. Use Roles.userIsInRole(this.userId, roles) in publications.'
+        );
       }
+
+      throw err;
     }
     return Roles.userIsInRole(currentUser, roles, group);
   },
