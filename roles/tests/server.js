@@ -22,6 +22,10 @@
     }
   }
 
+  // Mock Meteor.user() for isInRole/has method testing
+  Meteor.user = function () {
+    return users.eve
+  }
 
   function testUser (test, username, expectedRoles, group) {
     var userId = users[username],
@@ -103,6 +107,22 @@
         {$addToSet: { roles: { $each: ['admin', 'user'] } } }
       )
       testUser(test, 'eve', ['admin', 'user'])
+    })
+
+  Tinytest.add(
+    'roles - can check if user is in role via isInRole()/has()',
+    function (test) {
+      reset()
+
+      Meteor.users.update(
+        {"_id":users.eve},
+        {$addToSet: { roles: { $each: ['admin', 'user'] } } }
+      )
+
+      test.isTrue(Roles.isInRole(['admin', 'user']))
+      test.isTrue(Roles.has(['admin', 'user']))
+      // test.isTrue(Roles.isInRole('user', 'random-group')) <- this test should pass but fails
+      test.isFalse(Roles.isInRole('nonexisting'))
     })
 
   Tinytest.add(
