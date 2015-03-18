@@ -530,6 +530,34 @@ _.extend(Roles, {
     }
 
   }, //End getGroupsForUser
+  /**
+   * set role's descript. Whitespace will be trimmed.
+   *
+   * @method setRoleDescript
+   * @param {String} role Name of role
+   * @param {String} role descript of role
+   * @return {String} id of new role
+   */
+  setRoleDscript: function (role, descript) {
+    if (!role
+        || 'string' !== typeof role
+        || role.trim().length === 0) {
+        throw new Error ("'role' is Empty")
+        return
+    }
+    if (!descript
+        || 'string' !== typeof descript
+        || descript.trim().length === 0) {
+        throw new Error ("'descript' is Empty")
+        return
+    }
+
+    try {
+      Meteor.roles.update({'name': role.trim()}, {'$set':{'descript': descript.trim()}})
+    } catch (e) {
+      throw e
+    }
+  },
 
 
   /**
