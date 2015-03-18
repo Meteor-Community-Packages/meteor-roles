@@ -57,9 +57,10 @@ _.extend(Roles, {
    *
    * @method createRole
    * @param {String} role Name of role
+   * @param {String} role descript of role
    * @return {String} id of new role
    */
-  createRole: function (role) {
+  createRole: function (role, descript) {
     var id,
         match
 
@@ -70,7 +71,7 @@ _.extend(Roles, {
     }
 
     try {
-      id = Meteor.roles.insert({'name': role.trim()})
+      id = Meteor.roles.insert({'name': role.trim(), 'descript': descript.trim()})
       return id
     } catch (e) {
       // (from Meteor accounts-base package, insertUserDoc func)
