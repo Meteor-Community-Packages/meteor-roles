@@ -432,9 +432,10 @@ _.extend(Roles, {
    *                            specified but need not have _all_ roles.
    * @param {String} [group] Optional name of group to restrict roles to.
    *                         User's Roles.GLOBAL_GROUP will also be checked.
+   * @param {Object} projection the mongodb projection to apply to the find.
    * @return {Cursor} cursor of users in role
    */
-  getUsersInRole: function (role, group) {
+  getUsersInRole: function (role, group, projection) {
     var query,
         roles = role,
         groupQuery
@@ -480,7 +481,7 @@ _.extend(Roles, {
       query.$or.push({roles: {$in: roles}})
     }
 
-    return Meteor.users.find(query)
+    return Meteor.users.find(query, projection)
   },  // end getUsersInRole 
   
   /**
