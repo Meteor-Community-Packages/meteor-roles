@@ -69,7 +69,11 @@ Roles._uiHelpers = {
   }
 }
 
-if (Package.ui) {
+if(Package.blaze) {
+  _.each(Roles._uiHelpers, function (func, name) {
+    Package.blaze.Blaze.registerHelper(name, func) 
+  })
+} else if (Package.ui) {
   _.each(Roles._uiHelpers, function (func, name) {
     Package.ui.UI.registerHelper(name, func) 
   })
