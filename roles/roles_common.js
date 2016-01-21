@@ -307,8 +307,7 @@ _.extend(Roles, {
         return _.some(roles, function (role) {
           return _.contains(userRoles, role)
         })
-      } else if ('object' === typeof userRoles) {
-        if(!userRoles) return false
+      } else if (userRoles && 'object' === typeof userRoles) {
         // roles field is dictionary of groups
         found = _.isArray(userRoles[group]) && _.some(roles, function (role) {
           return _.contains(userRoles[group], role)
