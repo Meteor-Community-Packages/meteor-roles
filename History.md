@@ -1,3 +1,8 @@
+## v1.2.15
+
+* Wrap localStorage in try/catch to avoid crash when disabled. #182
+
+
 ## v1.2.14
 
 * Compatibility with Meteor 1.2. #133
