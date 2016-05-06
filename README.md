@@ -47,7 +47,7 @@ Thanks to:
 <a id="roles-authorization" name="roles-authorization"></a>
 ### Authorization
 
-This package lets you attach permissions to a user which you can then check against later when deciding whether to grant access to Meteor methods or publish data.  The core concept is very simple, essentially you are attaching strings to a user object and then checking for the existance of those strings later. In some sense, it is very similar to tags on blog posts. This package provides helper methods to make the process of adding, removing, and verifying those permissions easier.
+This package lets you attach permissions to a user which you can then check against later when deciding whether to grant access to Meteor methods or publish data.  The core concept is very simple, essentially you are attaching strings to a user object and then checking for the existence of those strings later. In some sense, it is very similar to tags on blog posts. This package provides helper methods to make the process of adding, removing, and verifying those permissions easier.
 
 All versions of Meteor from 0.5 to current are supported (excluding Meteor 0.9.1).  UI-less apps are supported as well.
 
