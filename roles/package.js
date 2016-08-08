@@ -30,6 +30,8 @@ Package.onUse(function (api) {
 Package.onTest(function (api) {
   var both = ['client', 'server'];
 
+  api.versionsFrom("METEOR@1.4.0.1");
+
   // `accounts-password` is included so `Meteor.users` exists
 
   api.use(['alanning:roles',
