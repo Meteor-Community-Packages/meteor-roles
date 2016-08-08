@@ -243,7 +243,7 @@ _.extend(Roles, {
       }
     }
     catch (ex) {
-      if (ex.name === 'MongoError' && isMongoMixError(ex.err)) {
+      if (ex.name === 'MongoError' && isMongoMixError(ex.err || ex.errmsg)) {
         throw new Error (mixingGroupAndNonGroupErrorMsg)
       }
 
@@ -683,7 +683,7 @@ _.extend(Roles, {
       }
     }
     catch (ex) {
-      if (ex.name === 'MongoError' && isMongoMixError(ex.err)) {
+      if (ex.name === 'MongoError' && isMongoMixError(ex.err || ex.errmsg)) {
         throw new Error (mixingGroupAndNonGroupErrorMsg)
       }
 
