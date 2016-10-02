@@ -1010,6 +1010,23 @@
       Roles.addUsersToRoles(users.bob, ['editor', 'user'], 'g$roup1')
     })
 
+  Tinytest.add(
+    'roles - userIsInRole returns false for unknown roles',
+    function (test) {
+      reset();
+
+      Roles.createRole('admin')
+      Roles.createRole('user')
+      Roles.createRole('editor')
+      Roles.addUsersToRoles(users.eve, ['admin', 'user'])
+      Roles.addUsersToRoles(users.eve, ['editor'])
+
+      test.isFalse(Roles.userIsInRole(users.eve, 'unknown'))
+      test.isFalse(Roles.userIsInRole(users.eve, []))
+      test.isFalse(Roles.userIsInRole(users.eve, null))
+      test.isFalse(Roles.userIsInRole(users.eve, undefined))
+    });
+
   function printException (ex) {
     var tmp = {}
     for (var key in ex) {
