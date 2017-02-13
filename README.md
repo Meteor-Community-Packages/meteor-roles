@@ -72,7 +72,7 @@ You can have traditional roles like, "admin" or "webmaster", or you can assign m
 
 Sometimes it's useful to let a user have independent sets of permissions.  The `roles` package calls these independent sets, "groups" for lack of a better term.  You can think of them as "partitions" if that is more clear.  Users can have one set of permissions in group A and another set of permissions in group B.  Let's go through an example of this using soccer/football teams as groups.
 
-```
+```js
 Roles.addUsersToRoles(joesUserId, ['manage-team','schedule-game'], 'manchester-united.com')
 Roles.addUsersToRoles(joesUserId, ['player','goalie'], 'real-madrid.com')
 
@@ -86,7 +86,7 @@ NOTE: If you use groups for _ANY_ of your users, you should use groups for _ALL_
 
 Now, let's take a look at how to use the Global Group.  Say we want to give Joe permission to do something across all of our groups.  That's what the Global Group is for:
 
-```
+```js
 Roles.addUsersToRoles(joesUserId, 'super-admin', Roles.GLOBAL_GROUP)
 
 if (Roles.userIsInRole(joesUserId, ['manage-team', 'super-admin'], 'real-madrid.com')) {
