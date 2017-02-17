@@ -185,7 +185,7 @@ _.extend(Roles, {
    *
    * @method removeUsersFromRoles
    * @param {Array|String} users User id(s) or object(s) with an _id field
-   * @param {Array|String} roles Name(s) of roles to add users to
+   * @param {Array|String} roles Name(s) of roles to remove users from
    * @param {String} [group] Optional. Group name. If supplied, only that
    *                         group will have roles removed.
    */
