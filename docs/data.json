@@ -279,7 +279,7 @@
                 },
                 {
                     "name": "roles",
-                    "description": "Name(s) of roles to add users to",
+                    "description": "Name(s) of roles to remove users from",
                     "type": "Array|String"
                 },
                 {
