@@ -1,6 +1,6 @@
 Package.describe({
   summary: "Authorization package for Meteor",
-  version: "1.2.15",
+  version: "1.2.16",
   git: "https://github.com/alanning/meteor-roles.git",
   name: "alanning:roles"
 });

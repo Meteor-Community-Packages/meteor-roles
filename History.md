@@ -1,3 +1,7 @@
+## v1.2.16
+
+* Support new MongoDB version.
+
 ## v1.2.15
 
 * Wrap localStorage in try/catch to avoid crash when disabled. #182
