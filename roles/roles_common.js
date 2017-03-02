@@ -487,28 +487,28 @@ _.extend(Roles, {
    *
    * @method getGroupsForUser
    * @param {String|Object} user User Id or actual user object
-   * @param {String} [role] Optional name of roles to restrict groups to.
+   * @param {String|Array} [roles] Optional name or array of names of roles to restrict groups to.
    *
    * @return {Array} Array of user's groups, unsorted. Roles.GLOBAL_GROUP will be omitted
    */
-  getGroupsForUser: function (user, role) {
+  getGroupsForUser: function (user, roles) {
     var userGroups = [];
     
     if (!user) return []
-    if (role) {
-      if ('string' !== typeof role) return []
-      if ('$' === role[0]) return []
+    if (roles) {
+      if ('string' === typeof roles) roles = [roles]
+      if (_.some(roles, function(role) { return '$' === role[0] } ) ) return []
 
       // convert any periods to underscores
-      role = role.replace('.', '_')
+      roles = _.map( roles, function(role) { return role.replace('.', '_') } )
     }
 
     if ('string' === typeof user) {
       user = Meteor.users.findOne(
                {_id: user},
                {fields: {roles: 1}})
-    
-    }else if ('object' !== typeof user) {
+
+    } else if ('object' !== typeof user) {
       // invalid user object
       return []
     }
@@ -516,9 +516,9 @@ _.extend(Roles, {
     //User has no roles or is not using groups
     if (!user || !user.roles || _.isArray(user.roles)) return []
 
-    if (role) {
+    if (roles) {
       _.each(user.roles, function(groupRoles, groupName) {
-        if (_.contains(groupRoles, role) && groupName !== Roles.GLOBAL_GROUP) {
+        if (_.intersection(groupRoles, roles).length > 0 && groupName !== Roles.GLOBAL_GROUP) {
           userGroups.push(groupName);
         }
       });

@@ -711,6 +711,7 @@
     Roles.addUsersToRoles([users.eve], ['editor', 'user'], 'group2')
 
     // by userId
+    console.log(Roles.getGroupsForUser(userId, 'user'))
     test.equal(Roles.getGroupsForUser(userId, 'user'), ['group2'])
     test.equal(Roles.getGroupsForUser(userId, 'editor'), ['group1', 'group2'])
     test.equal(Roles.getGroupsForUser(userId, 'admin'), [])
@@ -720,6 +721,41 @@
     test.equal(Roles.getGroupsForUser(userObj, 'user'), ['group2'])
     test.equal(Roles.getGroupsForUser(userObj, 'editor'), ['group1', 'group2'])
     test.equal(Roles.getGroupsForUser(userObj, 'admin'), [])
+  })
+
+  Tinytest.add(
+    'roles - can get all groups for user by role array', 
+    function (test) {
+      reset()
+
+    var userId = users.eve,
+        userObj
+
+    Roles.addUsersToRoles([users.eve], ['editor'], 'group1')
+    Roles.addUsersToRoles([users.eve], ['editor', 'user'], 'group2')
+    Roles.addUsersToRoles([users.eve], ['moderator'], 'group3')
+
+    // by userId, one role
+    test.equal(Roles.getGroupsForUser(userId, ['user']), ['group2'])
+    test.equal(Roles.getGroupsForUser(userId, ['editor']), ['group1', 'group2'])
+    test.equal(Roles.getGroupsForUser(userId, ['admin']), [])
+
+    // by userId, multiple roles
+    test.equal(Roles.getGroupsForUser(userId, ['editor','user']), ['group1', 'group2'])
+    test.equal(Roles.getGroupsForUser(userId, ['editor','moderator']), ['group1','group2','group3'])
+    test.equal(Roles.getGroupsForUser(userId, ['user','moderator']), ['group2','group3'])
+
+    // by user object, one role
+    userObj = Meteor.users.findOne({_id: userId})
+    test.equal(Roles.getGroupsForUser(userObj, ['user']), ['group2'])
+    test.equal(Roles.getGroupsForUser(userObj, ['editor']), ['group1', 'group2'])
+    test.equal(Roles.getGroupsForUser(userObj, ['admin']), [])
+
+
+    // by user object, multiple roles
+    test.equal(Roles.getGroupsForUser(userObj, ['editor','user']), ['group1', 'group2'])
+    test.equal(Roles.getGroupsForUser(userObj, ['editor','moderator']), ['group1','group2','group3'])
+    test.equal(Roles.getGroupsForUser(userObj, ['user','moderator']), ['group2','group3'])
   })
   
   Tinytest.add(
@@ -735,11 +771,15 @@
     // by userId
     test.equal(Roles.getGroupsForUser(userId), [])
     test.equal(Roles.getGroupsForUser(userId, 'editor'), [])
+    test.equal(Roles.getGroupsForUser(userId, ['editor']), [])
+    test.equal(Roles.getGroupsForUser(userId, ['editor','user']), [])
 
     // by user object
     userObj = Meteor.users.findOne({_id: userId})
     test.equal(Roles.getGroupsForUser(userObj), [])
     test.equal(Roles.getGroupsForUser(userObj, 'editor'), [])
+    test.equal(Roles.getGroupsForUser(userObj, ['editor']), [])
+    test.equal(Roles.getGroupsForUser(userObj, ['editor','user']), [])
   })
   
   
@@ -759,12 +799,20 @@
     test.equal(Roles.getGroupsForUser(userId, 'user'), ['group2'])
     test.equal(Roles.getGroupsForUser(userId, 'editor'), ['group1', 'group2'])
     test.equal(Roles.getGroupsForUser(userId, 'admin'), [])
+    test.equal(Roles.getGroupsForUser(userId, ['user']), ['group2'])
+    test.equal(Roles.getGroupsForUser(userId, ['editor']), ['group1', 'group2'])
+    test.equal(Roles.getGroupsForUser(userId, ['admin']), [])
+    test.equal(Roles.getGroupsForUser(userId, ['user','editor','admin']), ['group1', 'group2'])
 
     // by user object
     userObj = Meteor.users.findOne({_id: userId})
     test.equal(Roles.getGroupsForUser(userObj, 'user'), ['group2'])
     test.equal(Roles.getGroupsForUser(userObj, 'editor'), ['group1', 'group2'])
     test.equal(Roles.getGroupsForUser(userObj, 'admin'), [])
+    test.equal(Roles.getGroupsForUser(userObj, ['user']), ['group2'])
+    test.equal(Roles.getGroupsForUser(userObj, ['editor']), ['group1', 'group2'])
+    test.equal(Roles.getGroupsForUser(userObj, ['admin']), [])
+    test.equal(Roles.getGroupsForUser(userObj, ['user','editor','admin']), ['group1', 'group2'])
   })
 
 
