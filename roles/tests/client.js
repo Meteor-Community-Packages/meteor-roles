@@ -79,6 +79,15 @@
     })
 
   Tinytest.add(
+    'roles - can check current user\'s roles via isInRole()/has()',
+    function (test) {
+      test.isTrue(Roles.isInRole(['admin', 'editor']))
+      test.isTrue(Roles.has(['admin', 'editor']))
+      test.isTrue(Roles.isInRole('editor', 'random-group'))
+      test.isFalse(Roles.isInRole('nonexisting'))
+    })
+
+  Tinytest.add(
     'roles - can check if user is in role', 
     function (test) {
       testUser(test, 'eve', ['admin', 'editor'])
