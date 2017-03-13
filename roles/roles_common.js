@@ -1253,7 +1253,7 @@ _.extend(Roles, {
 
     return _.find(
       role.children,
-      (childRole) => Roles.isParentOf(childRole._id, demandedRoleName)
+      function (childRole) { return Roles.isParentOf(childRole._id, demandedRoleName); }
     ) !== undefined;
   },
 
