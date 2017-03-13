@@ -1231,6 +1231,33 @@ _.extend(Roles, {
   },
 
   /**
+   * By this method you can find out if a role is parent of another role.
+   *
+   * WARNING: If you check this on the client, please make sure all roles are published.
+   *
+   * @method isParentOf
+   * @param {String} roleName The role you have
+   * @param {String} demandedRoleName The role you want to find within roleName
+   * @private
+   * @static
+   */
+  isParentOf: function (roleName, demandedRoleName) {
+    if (roleName === demandedRoleName) {
+      return true;
+    }
+
+    const role = Meteor.roles.findOne(roleName);
+
+    // role does not exist, we do not anything more
+    if (!role) return false;
+
+    return _.find(
+      role.children,
+      (childRole) => Roles.isParentOf(childRole._id, demandedRoleName)
+    ) !== undefined;
+  },
+
+  /**
    * Normalize options.
    *
    * @method _normalizeOptions
