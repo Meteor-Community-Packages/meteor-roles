@@ -108,6 +108,19 @@ _.extend(Roles, {
       Meteor.roles.remove({_id: thisRole._id})
     }
   },
+    /**
+     * Delete a group, which will go through all users and remove the group
+     * (key) from their roles object. This is mostly a clean-up method.
+     *
+     * @method deleteGroup
+     * @param {String} group Name of group
+     */
+    deleteGroup: function (group) {
+      if (!group) return
+
+      var role = 'roles.' + group;
+      Meteor.users.update({}, { $unset: { role: '' } }, { multi: true });
+    },
 
   /**
    * Add users to roles. Will create roles as needed.
