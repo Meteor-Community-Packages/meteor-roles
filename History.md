@@ -13,6 +13,14 @@
 * `addUsersToRoles` and `setUserRoles` now require that roles exist and will not create missing roles automatically.
 * All functions work with 1.0 arguments, but in 2.0 accept extra arguments and/or options.
 
+## v1.2.16
+
+* Support new MongoDB version.
+
+## v1.2.15
+
+* Wrap localStorage in try/catch to avoid crash when disabled. #182
+
 ## v1.2.14
 
 * Compatibility with Meteor 1.2. #133
