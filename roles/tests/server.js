@@ -2612,19 +2612,32 @@
     });
 
 Tinytest.add(
-  'roles - isParentOf - returns false for unknown roles',
+  'roles - isParentOf - returns false if either role does not exist',
+  function (test) {
+    test.isFalse(Roles.isParentOf('admin', 'unknown'));
+    test.isFalse(Roles.isParentOf('unknown', 'admin'));
+  });
+
+Tinytest.add(
+  'roles - isParentOf - throws an error for unknown roles',
   function (test) {
     reset();
 
     Roles.createRole('admin');
 
-    test.isFalse(Roles.isParentOf('admin', 'unknown'));
-    test.isFalse(Roles.isParentOf('admin', null));
-    test.isFalse(Roles.isParentOf('admin', undefined));
+    test.throws(function () {
+      Roles.isParentOf('admin', null);
+    }, /Invalid role name/);
+    test.throws(function () {
+      Roles.isParentOf('admin', undefined);
+    }, /Invalid role name/);
 
-    test.isFalse(Roles.isParentOf('unknown', 'admin'));
-    test.isFalse(Roles.isParentOf(null, 'admin'));
-    test.isFalse(Roles.isParentOf(undefined, 'admin'));
+    test.throws(function () {
+      Roles.isParentOf(null, 'admin');
+    }, /Invalid role name/);
+    test.throws(function () {
+      Roles.isParentOf(undefined, 'admin');
+    }, /Invalid role name/);
   });
 
 Tinytest.add(

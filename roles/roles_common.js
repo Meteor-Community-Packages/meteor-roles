@@ -1242,19 +1242,38 @@ _.extend(Roles, {
    * @static
    */
   isParentOf: function (roleName, demandedRoleName) {
+    Roles._checkRoleName(roleName);
+    Roles._checkRoleName(demandedRoleName);
+
+    if (roleName === null || demandedRoleName === null) {
+      return false;
+    }
+
     if (roleName === demandedRoleName) {
       return true;
     }
 
-    const role = Meteor.roles.findOne(roleName);
+    var alreadyCheckedRoles = [];
+    var rolesToCheck = [roleName];
+    while (rolesToCheck.length !== 0) {
+      var checkRoleName = rolesToCheck.pop();
+      alreadyCheckedRoles.push(checkRoleName);
 
-    // role does not exist, we do not anything more
-    if (!role) return false;
+      var checkRole = Meteor.roles.findOne({ _id: checkRoleName });
 
-    return _.find(
-      role.children,
-      function (childRole) { return Roles.isParentOf(childRole._id, demandedRoleName); }
-    ) !== undefined;
+      // This should not happen, but this is a problem to address at some other time.
+      if (!checkRole) continue;
+
+      var childRoleIds = _.pluck(checkRole.children, '_id');
+
+      if (_.contains(childRoleIds, demandedRoleName)) {
+        return true;
+      }
+
+      rolesToCheck = _.union(rolesToCheck, _.difference(childRoleIds, alreadyCheckedRoles));
+    }
+
+    return false;
   },
 
   /**
