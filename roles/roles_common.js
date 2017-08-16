@@ -1231,46 +1231,39 @@ _.extend(Roles, {
   },
 
   /**
-   * By this method you can find out if a role is parent of another role.
+   * Find out if a role is an ancestor of another role
    *
    * WARNING: If you check this on the client, please make sure all roles are published.
    *
    * @method isParentOf
-   * @param {String} roleName The role you have
-   * @param {String} demandedRoleName The role you want to find within roleName
-   * @private
+   * @param {String} parentRoleName The role you want to research
+   * @param {String} childRoleName The role you expect to be among the children of parentRoleName
    * @static
    */
-  isParentOf: function (roleName, demandedRoleName) {
-    Roles._checkRoleName(roleName);
-    Roles._checkRoleName(demandedRoleName);
+  isParentOf: function (parentRoleName, childRoleName) {
+    Roles._checkRoleName(parentRoleName);
+    Roles._checkRoleName(childRoleName);
 
-    if (roleName === null || demandedRoleName === null) {
+    if (parentRoleName === null || childRoleName === null) {
       return false;
     }
 
-    if (roleName === demandedRoleName) {
-      return true;
-    }
-
-    var alreadyCheckedRoles = [];
-    var rolesToCheck = [roleName];
+    var rolesToCheck = [parentRoleName];
     while (rolesToCheck.length !== 0) {
-      var checkRoleName = rolesToCheck.pop();
-      alreadyCheckedRoles.push(checkRoleName);
+      var roleName = rolesToCheck.pop();
 
-      var checkRole = Meteor.roles.findOne({ _id: checkRoleName });
-
-      // This should not happen, but this is a problem to address at some other time.
-      if (!checkRole) continue;
-
-      var childRoleIds = _.pluck(checkRole.children, '_id');
-
-      if (_.contains(childRoleIds, demandedRoleName)) {
+      if (roleName === childRoleName) {
         return true;
       }
 
-      rolesToCheck = _.union(rolesToCheck, _.difference(childRoleIds, alreadyCheckedRoles));
+      var role = Meteor.roles.findOne({_id: roleName});
+
+      // This should not happen, but this is a problem to address at some other time.
+      if (!role) continue;
+
+      var childRoleIds = _.pluck(role.children, '_id');
+
+      rolesToCheck = rolesToCheck.concat(childRoleIds);
     }
 
     return false;
