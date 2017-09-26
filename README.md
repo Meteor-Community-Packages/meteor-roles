@@ -327,6 +327,41 @@ Meteor.methods({
 
 <br />
 
+Perform complex permission checks in a declaritive way:
+
+(requires [mdg:validated-method](https://github.com/meteor/validated-method) and [didericis:permissions-mixin](https://github.com/Didericis/permissions-mixin)).
+
+```js
+// server/userMethods.js
+
+/**
+ * Allows a user of role 'basic' and group Roles.GLOBAL_GROUP when the input is {text: blah}
+ * Allows a user of role 'admin' and group Roles.GLOBAL_GROUP for all text in input
+ *
+ * @param {Object} input Input parameters
+ * @param {String} input.text Text to insert
+ */
+const allowBasicIfBlah = new ValidatedMethod({
+    name: 'AllowBasicIfBlah',
+    mixins: [PermissionsMixin],
+    allow: [{
+        roles: ['basic'],
+        group: Roles.GLOBAL_GROUP,
+        allow({text}) { return (text === 'blah'); }
+    }, {
+        roles: ['admin'],
+        group: Roles.GLOBAL_GROUP
+    }],
+    validate: new SimpleSchema({
+        text: { type: String }
+    }).validator(),
+    run({text}) {
+        return testCollection.insert({text: text});
+    }
+});
+
+```
+
 -- **Client** --
 
 Client javascript has access to all the same Roles functions as the server with the addition of a `isInRole` handlebars helper which is automatically registered by the Roles package.
