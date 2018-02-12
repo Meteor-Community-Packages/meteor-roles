@@ -1231,13 +1231,13 @@ _.extend(Roles, {
   },
 
   /**
-   * Find out if a role is an ancestor of another role
+   * Find out if a role is an ancestor of another role.
    *
    * WARNING: If you check this on the client, please make sure all roles are published.
    *
    * @method isParentOf
-   * @param {String} parentRoleName The role you want to research
-   * @param {String} childRoleName The role you expect to be among the children of parentRoleName
+   * @param {String} parentRoleName The role you want to research.
+   * @param {String} childRoleName The role you expect to be among the children of parentRoleName.
    * @static
    */
   isParentOf: function (parentRoleName, childRoleName) {
@@ -1261,9 +1261,7 @@ _.extend(Roles, {
       // This should not happen, but this is a problem to address at some other time.
       if (!role) continue;
 
-      var childRoleIds = _.pluck(role.children, '_id');
-
-      rolesToCheck = rolesToCheck.concat(childRoleIds);
+      rolesToCheck = rolesToCheck.concat(_.pluck(role.children, '_id'));
     }
 
     return false;
