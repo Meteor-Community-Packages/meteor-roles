@@ -327,6 +327,43 @@ Meteor.methods({
 
 <br />
 
+Perform complex permission checks in a declaritive way:
+
+(requires [mdg:validated-method](https://github.com/meteor/validated-method) and [didericis:permissions-mixin](https://github.com/Didericis/permissions-mixin)).
+
+```js
+// server/userMethods.js
+
+/**
+ * A user of role 'partner_admin' and group Roles.GLOBAL_GROUP can only create valid partner topics
+ * A user of role 'admin' and group Roles.GLOBAL_GROUP can create any arbitrary topic
+ *
+ * @param {Object} input Input parameters
+ * @param {String} input.title Topic title
+ */
+const createTopic = new ValidatedMethod({
+    name: 'CreateTopic',
+    mixins: [PermissionsMixin],
+    allow: [{
+        roles: ['partner_admin'],
+        group: Roles.GLOBAL_GROUP,
+        allow({ title }) { 
+          return VALID_PARTNER_TOPIC_TITLES.includes(title)
+        }
+    }, {
+        roles: ['admin'],
+        group: Roles.GLOBAL_GROUP
+    }],
+    validate: new SimpleSchema({
+        title: { type: String }
+    }).validator(),
+    run({ title }) {
+        return topics.insert({ title });
+    }
+});
+
+```
+
 -- **Client** --
 
 Client javascript has access to all the same Roles functions as the server with the addition of a `isInRole` handlebars helper which is automatically registered by the Roles package.
