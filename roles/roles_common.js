@@ -500,7 +500,7 @@ _.extend(Roles, {
       if ('$' === role[0]) return []
 
       // convert any periods to underscores
-      role = role.replace('.', '_')
+      // role = role.replace('.', '_')
     }
 
     if ('string' === typeof user) {
