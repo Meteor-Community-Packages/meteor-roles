@@ -30,7 +30,7 @@ if ('undefined' === typeof Roles) {
 
 var mixingGroupAndNonGroupErrorMsg = "Roles error: Can't mix grouped and non-grouped roles for same user";
 
-_.extend(Roles, {
+Object.assign(Roles, {
 
   /**
    * Constant used to reference the special 'global' group that 
@@ -205,11 +205,11 @@ _.extend(Roles, {
     }
 
     // ensure arrays
-    if (!_.isArray(users)) users = [users]
-    if (!_.isArray(roles)) roles = [roles]
+    if (!Array.isArray(users)) users = [users]
+    if (!Array.isArray(roles)) roles = [roles]
 
     // ensure users is an array of user ids
-    users = _.reduce(users, function (memo, user) {
+    users = users.reduce(function (memo, user) {
       var _id
       if ('string' === typeof user) {
         memo.push(user)
@@ -234,7 +234,7 @@ _.extend(Roles, {
     try {
       if (Meteor.isClient) {
         // Iterate over each user to fulfill Meteor's 'one update per ID' policy
-        _.each(users, function (user) {
+        users.forEach(function (user) {
           Meteor.users.update({_id:user}, update)
         })
       } else {
@@ -288,7 +288,7 @@ _.extend(Roles, {
         found = false
 
     // ensure array to simplify code
-    if (!_.isArray(roles)) {
+    if (!Array.isArray(roles)) {
       roles = [roles]
     }
 
@@ -303,20 +303,20 @@ _.extend(Roles, {
     
     if ('object' === typeof user) {
       userRoles = user.roles
-      if (_.isArray(userRoles)) {
-        return _.some(roles, function (role) {
-          return _.contains(userRoles, role)
+      if (Array.isArray(userRoles)) {
+        return roles.some(function (role) {
+          return userRoles.includes(role)
         })
       } else if (userRoles && 'object' === typeof userRoles) {
         // roles field is dictionary of groups
-        found = _.isArray(userRoles[group]) && _.some(roles, function (role) {
-          return _.contains(userRoles[group], role)
+        found = Array.isArray(userRoles[group]) && roles.some(function (role) {
+          return userRoles[group].includes(role)
         })
         if (!found) {
           // not found in regular group or group not specified.  
           // check Roles.GLOBAL_GROUP, if it exists
-          found = _.isArray(userRoles[Roles.GLOBAL_GROUP]) && _.some(roles, function (role) {
-            return _.contains(userRoles[Roles.GLOBAL_GROUP], role)
+          found = Array.isArray(userRoles[Roles.GLOBAL_GROUP]) && roles.some(function (role) {
+            return userRoles[Roles.GLOBAL_GROUP].includes(role)
           })
         }
         return found
@@ -395,10 +395,10 @@ _.extend(Roles, {
     if (!user || !user.roles) return []
 
     if (group) {
-      return _.union(user.roles[group] || [], user.roles[Roles.GLOBAL_GROUP] || [])
+      return [...(user.roles[group] || []), ...(user.roles[Roles.GLOBAL_GROUP]|| [])].filter((value, index, self) => self.indexOf(value) === index);
     }
 
-    if (_.isArray(user.roles))
+    if (Array.isArray(user.roles))
       return user.roles
 
     // using groups but group not specified. return global group, if exists
@@ -439,7 +439,7 @@ _.extend(Roles, {
         groupQuery
 
     // ensure array to simplify query logic
-    if (!_.isArray(roles)) roles = [roles]
+    if (!Array.isArray(roles)) roles = [roles]
     
     if (group) {
       if ('string' !== typeof group)
@@ -514,17 +514,17 @@ _.extend(Roles, {
     }
 
     //User has no roles or is not using groups
-    if (!user || !user.roles || _.isArray(user.roles)) return []
+    if (!user || !user.roles || Array.isArray(user.roles)) return []
 
     if (role) {
-      _.each(user.roles, function(groupRoles, groupName) {
-        if (_.contains(groupRoles, role) && groupName !== Roles.GLOBAL_GROUP) {
+      Object.entries(user.roles).forEach(function([groupName, groupRoles]) {
+        if (groupRoles.includes(role) && groupName !== Roles.GLOBAL_GROUP) {
           userGroups.push(groupName);
         }
       });
       return userGroups;
     }else {
-      return _.without(_.keys(user.roles), Roles.GLOBAL_GROUP);
+      return Object.keys(user.roles).filter((role) => !Roles.GLOBAL_GROUP.includes(role))
     }
 
   }, //End getGroupsForUser
@@ -622,11 +622,11 @@ _.extend(Roles, {
         update
 
     // ensure arrays to simplify code
-    if (!_.isArray(users)) users = [users]
-    if (!_.isArray(roles)) roles = [roles]
+    if (!Array.isArray(users)) users = [users]
+    if (!Array.isArray(roles)) roles = [roles]
 
     // remove invalid roles
-    roles = _.reduce(roles, function (memo, role) {
+    roles = roles.reduce(function (memo, role) {
       if (role
           && 'string' === typeof role
           && role.trim().length > 0) {
@@ -639,18 +639,18 @@ _.extend(Roles, {
     //if (roles.length === 0) return
 
     // ensure all roles exist in 'roles' collection
-    existingRoles = _.reduce(Meteor.roles.find({}).fetch(), function (memo, role) {
+    existingRoles = Meteor.roles.find({}).fetch().reduce(function (memo, role) {
       memo[role.name] = true
       return memo
     }, {})
-    _.each(roles, function (role) {
+    roles.forEach(function (role) {
       if (!existingRoles[role]) {
         Roles.createRole(role)
       }
     })
 
     // ensure users is an array of user ids
-    users = _.reduce(users, function (memo, user) {
+    users = users.reduce(function (memo, user) {
       var _id
       if ('string' === typeof user) {
         memo.push(user)
@@ -670,7 +670,7 @@ _.extend(Roles, {
       if (Meteor.isClient) {
         // On client, iterate over each user to fulfill Meteor's 
         // 'one update per ID' policy
-        _.each(users, function (user) {
+        users.forEach(function (user) {
           Meteor.users.update({_id: user}, update)
         })
       } else {
@@ -704,7 +704,7 @@ function isMongoMixError (errorMsg) {
       'to traverse the element'
       ]
 
-  return _.some(expectedMessages, function (snippet) {
+  return expectedMessages.some(function (snippet) {
     return strContains(errorMsg, snippet)
   })
 }

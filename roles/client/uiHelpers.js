@@ -51,7 +51,7 @@ Roles._uiHelpers = {
     if (!Match.test(role, String)) return false
 
     if (comma !== -1) {
-      roles = _.reduce(role.split(','), function (memo, r) {
+      roles = role.split(',').reduce(function (memo, r) {
         if (!r || !r.trim()) {
           return memo
         }
@@ -83,7 +83,7 @@ if (Roles.debug && console.log) {
 if ('undefined' !== typeof Package.blaze &&
     'undefined' !== typeof Package.blaze.Blaze &&
     'function'  === typeof Package.blaze.Blaze.registerHelper) {
-  _.each(Roles._uiHelpers, function (func, name) {
+  Roles._uiHelpers.forEach(function (func, name) {
     if (Roles.debug && console.log) {
       console.log("[roles] registering Blaze helper '" + name + "'")
     }

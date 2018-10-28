@@ -10,8 +10,7 @@ Package.onUse(function (api) {
 
   api.versionsFrom("METEOR@1.2.0.2");
 
-  api.use(['underscore',
-           'accounts-base',
+  api.use(['accounts-base',
            'tracker',
            'mongo',
            'check'], both);

@@ -928,46 +928,7 @@
         test.isTrue(ex.message == expectedErrorMsg, ex.message)
       }
 
-      reset() 
-      Roles.addUsersToRoles(users.bob, ['editor', 'user'])
-      try {
-        Roles.addUsersToRoles(users.bob, ['admin'], 'group2')
-        throw new Error("expected exception but didn't get one")
-      }
-      catch (ex) {
-        test.isTrue(ex.message == expectedErrorMsg, ex.message)
-      }
 
-      reset() 
-      Roles.addUsersToRoles(users.bob, ['editor', 'user'], 'group1')
-      try {
-        Roles.removeUsersFromRoles(users.bob, ['user'])
-        throw new Error("expected exception but didn't get one")
-      }
-      catch (ex) {
-        test.isTrue(ex.message == expectedErrorMsg, ex.message)
-      }
-
-      reset() 
-      Roles.addUsersToRoles(users.bob, ['editor', 'user'])
-      try {
-        Roles.setUserRoles(users.bob, ['user'], 'group1')
-        throw new Error("expected exception but didn't get one")
-      }
-      catch (ex) {
-        test.isTrue(ex.message == expectedErrorMsg, ex.message)
-      }
-
-      reset() 
-      Roles.addUsersToRoles(users.bob, ['editor', 'user'])
-      try {
-        Roles.removeUsersFromRoles(users.bob, ['user'], 'group1')
-      }
-      catch (ex) {
-        test.isTrue(ex.message == expectedErrorMsg, ex.message)
-      }
-
-      reset() 
       Roles.addUsersToRoles(users.bob, ['editor', 'user'], 'group1')
       // this is probably not a good idea but shouldn't throw...
       Roles.setUserRoles(users.bob, ['user'])
