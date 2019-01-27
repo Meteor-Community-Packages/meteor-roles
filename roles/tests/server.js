@@ -2,6 +2,10 @@
 import { Meteor } from 'meteor/meteor'
 import { assert } from 'chai'
 
+// To ensure that the files are loaded for coverage
+import '../roles_server'
+import '../roles_common'
+
 // To allow inserting on the client, needed for testing.
 Meteor.roleAssignment.allow({
   insert () { return true },
