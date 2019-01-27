@@ -1,8 +1,12 @@
-/* global Meteor, Roles, Tinytest */
+/* global Meteor, Roles, Tinytest, Tracker */
 
 ;(function () {
   var users
   var roles = ['admin', 'editor', 'user']
+
+  Tracker.autorun(function () {
+    Roles.assignmentSubscription = Meteor.subscribe('_roleAssignments')
+  })
 
   users = {
     'eve': {
