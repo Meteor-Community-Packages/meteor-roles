@@ -1,4 +1,4 @@
-/* global Package */
+/* global Package, Npm */
 
 Package.describe({
   summary: 'Authorization package for Meteor',
@@ -33,6 +33,14 @@ Package.onUse(function (api) {
 })
 
 Package.onTest(function (api) {
+  api.use([
+    'meteortesting:mocha'
+  ])
+
+  Npm.depends({
+    'chai': '4.2.0'
+  })
+
   api.versionsFrom('METEOR@1.6')
 
   var both = ['client', 'server']
@@ -40,6 +48,7 @@ Package.onTest(function (api) {
   // `accounts-password` is included so `Meteor.users` exists
 
   api.use([
+    'ecmascript',
     'alanning:roles',
     'accounts-password',
     'mongo',
