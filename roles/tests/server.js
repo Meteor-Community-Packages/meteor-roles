@@ -1767,7 +1767,22 @@
 
       itemsEqual(test, Roles.getRolesForUser(users.eve, { anyScope: true, fullObjects: true }).map(obj => { delete obj._id; return obj }), [])
 
-      Roles._addUserToRole(users.eve, 'admin', { scope: null, ifExists: false })
+      test.include(
+        Object.keys(Roles._addUserToRole(users.eve, 'admin', { scope: null, ifExists: false })),
+        'insertedId'
+      )
+
+      itemsEqual(test, Roles.getRolesForUser(users.eve, { anyScope: true, fullObjects: true }).map(obj => { delete obj._id; return obj }), [{
+        role: { _id: 'admin' },
+        scope: null,
+        user: { _id: users.eve },
+        inheritedRoles: [{ _id: 'admin' }]
+      }])
+
+      test.notInclude(
+        Object.keys(Roles._addUserToRole(users.eve, 'admin', { scope: null, ifExists: false })),
+        'insertedId'
+      )
 
       itemsEqual(test, Roles.getRolesForUser(users.eve, { anyScope: true, fullObjects: true }).map(obj => { delete obj._id; return obj }), [{
         role: { _id: 'admin' },

@@ -505,6 +505,8 @@ Object.assign(Roles, {
         }
       })
     }
+
+    return res;
   },
 
   /**
