@@ -91,25 +91,6 @@ Object.assign(Roles, {
    * @static
    */
   deleteRole: function (roleName) {
-    /* Remove it from it's parent roles
-    Meteor.roles.update({}, {
-      $pull: {
-        children: {
-          _id: roleName
-        }
-      }
-    }, { multi: true })
-
-    // Their assignment
-    Meteor.roleAssignment.update({
-      'inheritedRoles._id': roleName
-    }, {
-      $pull: {
-        inheritedRoles: { _id: roleName }
-      }
-    }, { multi: true })
-    */
-
     var roles
     var inheritedRoles
 
@@ -506,7 +487,7 @@ Object.assign(Roles, {
       })
     }
 
-    return res;
+    return res
   },
 
   /**
