@@ -902,7 +902,17 @@
     })
 
   Tinytest.add(
-    'roles - can\'t get roles for non-existant user',
+    'roles - get an empty list of roles for an empty user',
+    function (test) {
+      reset()
+
+      itemsEqual(test, Roles.getRolesForUser(undefined), [])
+      itemsEqual(test, Roles.getRolesForUser(null), [])
+      itemsEqual(test, Roles.getRolesForUser({}), [])
+    })
+
+  Tinytest.add(
+    'roles - get an empty list of roles for non-existant user',
     function (test) {
       reset()
       test.equal(Roles.getRolesForUser('1'), [])
@@ -1163,6 +1173,18 @@
       userObj = Meteor.users.findOne({ _id: userId })
       itemsEqual(test, Roles.getRolesForUser(userObj, 'scope1'), ['editor'])
       itemsEqual(test, Roles.getRolesForUser(userObj), ['editor'])
+    })
+
+  Tinytest.add(
+    'roles - returns an empty list of scopes for null as user-id',
+    function (test) {
+      reset()
+
+      itemsEqual(test, Roles.getScopesForUser(undefined), [])
+      itemsEqual(test, Roles.getScopesForUser(null), [])
+      itemsEqual(test, Roles.getScopesForUser('foo'), [])
+      itemsEqual(test, Roles.getScopesForUser({}), [])
+      itemsEqual(test, Roles.getScopesForUser({ _id: 'foo' }), [])
     })
 
   Tinytest.add(
