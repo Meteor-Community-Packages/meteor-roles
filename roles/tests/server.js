@@ -761,6 +761,34 @@
     })
 
   Tinytest.add(
+    'roles - can remove multiple users from roles of any scope',
+    function (test) {
+      reset()
+
+      Roles.createRole('admin')
+      Roles.createRole('user')
+      Roles.createRole('editor')
+
+      // remove user role - one user
+      Roles.addUsersToRoles([users.eve, users.bob], ['editor', 'user'], 'scope1')
+      Roles.addUsersToRoles([users.joe, users.bob], ['user'], 'scope2')
+      testUser(test, 'eve', ['editor', 'user'], 'scope1')
+      testUser(test, 'bob', ['editor', 'user'], 'scope1')
+      testUser(test, 'joe', [], 'scope1')
+      testUser(test, 'eve', [], 'scope2')
+      testUser(test, 'bob', ['user'], 'scope2')
+      testUser(test, 'joe', ['user'], 'scope2')
+
+      Roles.removeUsersFromRoles([users.eve, users.bob], ['user'], { anyScope: true })
+      testUser(test, 'eve', ['editor'], 'scope1')
+      testUser(test, 'bob', ['editor'], 'scope1')
+      testUser(test, 'joe', [], 'scope1')
+      testUser(test, 'eve', [], 'scope2')
+      testUser(test, 'bob', [], 'scope2')
+      testUser(test, 'joe', ['user'], 'scope2')
+    })
+
+  Tinytest.add(
     'roles - can set user roles',
     function (test) {
       reset()
