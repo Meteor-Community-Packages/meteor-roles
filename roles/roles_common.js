@@ -985,20 +985,6 @@ Object.assign(Roles, {
   },
 
   /**
-   * @method _roleMatcher
-   * @param {String} roleName A role name to match against.
-   * @return {Function} A matcher function which accepts a role object and returns `true`
-   *                     if its name matches `roleName`.
-   * @private
-   * @static
-   */
-  _roleMatcher: function (roleName) {
-    return function (userRole) {
-      return userRole._id === roleName
-    }
-  },
-
-  /**
    * Throw an exception if `roleName` is an invalid role name.
    *
    * @method _checkRoleName
