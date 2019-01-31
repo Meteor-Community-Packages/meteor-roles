@@ -602,6 +602,30 @@ describe('roles', function () {
     testUser('joe', [], 'scope2')
   })
 
+  it('can remove multiple users from roles of any scope', function () {
+    Roles.createRole('admin')
+    Roles.createRole('user')
+    Roles.createRole('editor')
+
+    // remove user role - one user
+    Roles.addUsersToRoles([users.eve, users.bob], ['editor', 'user'], 'scope1')
+    Roles.addUsersToRoles([users.joe, users.bob], ['user'], 'scope2')
+    testUser('eve', ['editor', 'user'], 'scope1')
+    testUser('bob', ['editor', 'user'], 'scope1')
+    testUser('joe', [], 'scope1')
+    testUser('eve', [], 'scope2')
+    testUser('bob', ['user'], 'scope2')
+    testUser('joe', ['user'], 'scope2')
+
+    Roles.removeUsersFromRoles([users.eve, users.bob], ['user'], { anyScope: true })
+    testUser('eve', ['editor'], 'scope1')
+    testUser('bob', ['editor'], 'scope1')
+    testUser('joe', [], 'scope1')
+    testUser('eve', [], 'scope2')
+    testUser('bob', [], 'scope2')
+    testUser('joe', ['user'], 'scope2')
+  })
+
   it('can set user roles', function () {
     Roles.createRole('admin')
     Roles.createRole('user')
@@ -727,7 +751,13 @@ describe('roles', function () {
     assert.sameMembers(Roles.getAllRoles({ sort: { _id: -1 } }).fetch().map(r => r._id), expected.reverse())
   })
 
-  it('can\'t get roles for non-existant user', function () {
+  it('get an empty list of roles for an empty user', function () {
+    assert.sameMembers(Roles.getRolesForUser(undefined), [])
+    assert.sameMembers(Roles.getRolesForUser(null), [])
+    assert.sameMembers(Roles.getRolesForUser({}), [])
+  })
+  
+  it('get an empty list of roles for non-existant user', function () {
     assert.sameMembers(Roles.getRolesForUser('1'), [])
     assert.sameMembers(Roles.getRolesForUser('1', 'scope1'), [])
   })
@@ -966,6 +996,14 @@ describe('roles', function () {
     userObj = Meteor.users.findOne({ _id: userId })
     assert.sameMembers(Roles.getRolesForUser(userObj, 'scope1'), ['editor'])
     assert.sameMembers(Roles.getRolesForUser(userObj), ['editor'])
+  })
+
+  it('returns an empty list of scopes for null as user-id', function () {
+    assert.sameMembers(Roles.getScopesForUser(undefined), [])
+    assert.sameMembers(Roles.getScopesForUser(null), [])
+    assert.sameMembers(Roles.getScopesForUser('foo'), [])
+    assert.sameMembers(Roles.getScopesForUser({}), [])
+    assert.sameMembers(Roles.getScopesForUser({ _id: 'foo' }), [])
   })
 
   it('can get all scopes for user', function () {

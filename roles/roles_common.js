@@ -467,6 +467,7 @@ Object.assign(Roles, {
       }
     }
 
+    // This might create duplicates, because we don't have a unique index, but that's all right. In case there are two, withdrawing the role will effectively kill them both.
     const res = Meteor.roleAssignment.upsert({
       'user._id': userId,
       'role._id': roleName,
@@ -557,6 +558,7 @@ Object.assign(Roles, {
    * @param {Array|String} roles Name(s) of roles to add users to. Roles have to exist.
    * @param {Object|String} [options] Options:
    *   - `scope`: name of the scope, or `null` for the global role
+   *   - `anyScope`: if set, role can be in any scope (`scope` option is ignored)
    *
    * Alternatively, it can be a scope name string.
    * @static
@@ -597,6 +599,7 @@ Object.assign(Roles, {
    * @param {String} roleName Name of the role to add the user to. The role have to exist.
    * @param {Object} options Options:
    *   - `scope`: name of the scope, or `null` for the global role
+   *   - `anyScope`: if set, role can be in any scope (`scope` option is ignored)
    * @private
    * @static
    */
@@ -606,11 +609,16 @@ Object.assign(Roles, {
 
     if (!userId) return
 
-    Meteor.roleAssignment.remove({
+    const selector = {
       'user._id': userId,
-      'role._id': roleName,
-      scope: options.scope
-    })
+      'role._id': roleName
+    }
+
+    if (!options.anyScope) {
+      selector.scope = options.scope
+    }
+
+    Meteor.roleAssignment.remove(selector)
   },
 
   /**
@@ -661,9 +669,7 @@ Object.assign(Roles, {
       anyScope: false
     }, options)
 
-    if (!user) return false
-
-    if (typeof user === 'object') {
+    if (user && typeof user === 'object') {
       id = user._id
     } else {
       id = user
@@ -717,7 +723,7 @@ Object.assign(Roles, {
       anyScope: false
     }, options)
 
-    if (typeof user === 'object') {
+    if (user && typeof user === 'object') {
       id = user._id
     } else {
       id = user
@@ -796,7 +802,7 @@ Object.assign(Roles, {
   getUsersInRole: function (roles, options, queryOptions) {
     var ids
 
-    ids = Roles.getUserAssignmentsForRole(roles, options, {}).fetch().map(a => a.user._id)
+    ids = Roles.getUserAssignmentsForRole(roles, options).fetch().map(a => a.user._id)
 
     return Meteor.users.find({ _id: { $in: ids } }, ((options && options.queryOptions) || queryOptions) || {})
   },
@@ -806,7 +812,7 @@ Object.assign(Roles, {
    *
    * Options:
    *
-   * @method getUsersInRole
+   * @method getUserAssignmentsForRole
    * @param {Array|String} roles Name of role or an array of roles. If array, users
    *                             returned will have at least one of the roles
    *                             specified but need not have _all_ roles.
@@ -912,7 +918,7 @@ Object.assign(Roles, {
 
     if (roles && !Array.isArray(roles)) roles = [roles]
 
-    if (typeof user === 'object') {
+    if (user && typeof user === 'object') {
       id = user._id
     } else {
       id = user
