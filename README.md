@@ -73,6 +73,8 @@ You can have traditional roles like, "admin" or "webmaster", or you can assign m
 Sometimes it's useful to let a user have independent sets of permissions.  The `roles` package calls these independent sets, "groups" for lack of a better term.  You can think of them as "partitions" if that is more clear.  Users can have one set of permissions in group A and another set of permissions in group B.  Let's go through an example of this using soccer/football teams as groups.
 
 ```js
+import { Roles } from 'meteor/alanning:roles'
+
 Roles.addUsersToRoles(joesUserId, ['manage-team','schedule-game'], 'manchester-united.com')
 Roles.addUsersToRoles(joesUserId, ['player','goalie'], 'real-madrid.com')
 
@@ -87,6 +89,8 @@ NOTE: If you use groups for _ANY_ of your users, you should use groups for _ALL_
 Now, let's take a look at how to use the Global Group.  Say we want to give Joe permission to do something across all of our groups.  That's what the Global Group is for:
 
 ```js
+import { Roles } from 'meteor/alanning:roles'
+
 Roles.addUsersToRoles(joesUserId, 'super-admin', Roles.GLOBAL_GROUP)
 
 if (Roles.userIsInRole(joesUserId, ['manage-team', 'super-admin'], 'real-madrid.com')) {
@@ -110,6 +114,8 @@ if (Roles.userIsInRole(joesUserId, ['manage-team', 'super-admin'], 'real-madrid.
 
 † The type of the `roles` field depends on whether or not groups are used:
 ```js
+import { Roles } from 'meteor/alanning:roles'
+
 Roles.addUsersToRoles(bobsUserId, ['manage-team','schedule-game'])
 // internal representation - no groups
 // user.roles = ['manage-team','schedule-game']
@@ -200,6 +206,8 @@ Here are some potential use cases:
 
 Add users to roles:
 ```js
+import { Roles } from 'meteor/alanning:roles'
+
 var users = [
       {name:"Normal User",email:"normal@example.com",roles:[]},
       {name:"View-Secrets User",email:"view@example.com",roles:['view-secrets']},
@@ -233,6 +241,8 @@ Note that the `Roles.addUsersToRoles` call needs to come _after_ `Accounts.creat
 Check user roles before publishing sensitive data:
 ```js
 // server/publish.js
+import { Roles } from 'meteor/alanning:roles'
+
 
 // Give authorized users access to sensitive data by group
 Meteor.publish('secrets', function (group) {
@@ -254,6 +264,8 @@ Meteor.publish('secrets', function (group) {
 
 Prevent non-authorized users from creating new users:
 ```js
+import { Roles } from 'meteor/alanning:roles'
+
 Accounts.validateNewUser(function (user) {
   var loggedInUser = Meteor.user();
 
@@ -271,6 +283,7 @@ Accounts.validateNewUser(function (user) {
 Prevent access to certain functionality, such as deleting a user:
 ```js
 // server/userMethods.js
+import { Roles } from 'meteor/alanning:roles'
 
 Meteor.methods({
   /**
@@ -302,6 +315,7 @@ Meteor.methods({
 Manage a user's permissions:
 ```js
 // server/userMethods.js
+import { Roles } from 'meteor/alanning:roles'
 
 Meteor.methods({
   /**
