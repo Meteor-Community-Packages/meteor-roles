@@ -57,8 +57,6 @@ Object.assign(Roles, {
    * @static
    */
   createRole: function (roleName, options) {
-    options = Roles._normalizeOptions(options)
-
     Roles._checkRoleName(roleName)
 
     options = Object.assign({
