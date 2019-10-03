@@ -1,3 +1,8 @@
+## v1.2.17
+
+* Bumped for use with latest Meteor version, 1.8.1.
+* Moved to a new GitHub organization, so repository has a new location: https://github.com/Meteor-Community-Packages/meteor-roles
+
 ## v1.2.16
 
 * Support new MongoDB version.

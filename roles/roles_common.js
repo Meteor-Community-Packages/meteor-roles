@@ -33,7 +33,7 @@ var mixingGroupAndNonGroupErrorMsg = "Roles error: Can't mix grouped and non-gro
 _.extend(Roles, {
 
   /**
-   * Constant used to reference the special 'global' group that 
+   * Constant used to reference the special 'global' group that
    * can be used to apply blanket permissions across all groups.
    *
    * @example
@@ -130,14 +130,14 @@ _.extend(Roles, {
    * @param {Array|String} users User id(s) or object(s) with an _id field
    * @param {Array|String} roles Name(s) of roles/permissions to add users to
    * @param {String} [group] Optional group name. If supplied, roles will be
-   *                         specific to that group.  
+   *                         specific to that group.
    *                         Group names can not start with a '$' or contain
    *                         null characters.  Periods in names '.' are
    *                         automatically converted to underscores.
-   *                         The special group Roles.GLOBAL_GROUP provides 
+   *                         The special group Roles.GLOBAL_GROUP provides
    *                         a convenient way to assign blanket roles/permissions
-   *                         across all groups.  The roles/permissions in the 
-   *                         Roles.GLOBAL_GROUP group will be automatically 
+   *                         across all groups.  The roles/permissions in the
+   *                         Roles.GLOBAL_GROUP group will be automatically
    *                         included in checks for any group.
    */
   addUsersToRoles: function (users, roles, group) {
@@ -159,14 +159,14 @@ _.extend(Roles, {
    * @param {Array|String} users User id(s) or object(s) with an _id field
    * @param {Array|String} roles Name(s) of roles/permissions to add users to
    * @param {String} [group] Optional group name. If supplied, roles will be
-   *                         specific to that group.  
+   *                         specific to that group.
    *                         Group names can not start with '$'.
    *                         Periods in names '.' are automatically converted
    *                         to underscores.
-   *                         The special group Roles.GLOBAL_GROUP provides 
+   *                         The special group Roles.GLOBAL_GROUP provides
    *                         a convenient way to assign blanket roles/permissions
-   *                         across all groups.  The roles/permissions in the 
-   *                         Roles.GLOBAL_GROUP group will be automatically 
+   *                         across all groups.  The roles/permissions in the
+   *                         Roles.GLOBAL_GROUP group will be automatically
    *                         included in checks for any group.
    */
   setUserRoles: function (users, roles, group) {
@@ -223,7 +223,7 @@ _.extend(Roles, {
     }, [])
 
     // update all users, remove from roles set
-    
+
     if (group) {
       update = {$pullAll: {}}
       update.$pullAll['roles.'+group] = roles
@@ -268,16 +268,16 @@ _.extend(Roles, {
    *
    *     // this format can also be used as short-hand for Roles.GLOBAL_GROUP
    *     Roles.userIsInRole(user, 'admin')
-   *    
+   *
    * @method userIsInRole
    * @param {String|Object} user User Id or actual user object
-   * @param {String|Array} roles Name of role/permission or Array of 
-   *                            roles/permissions to check against.  If array, 
+   * @param {String|Array} roles Name of role/permission or Array of
+   *                            roles/permissions to check against.  If array,
    *                            will return true if user is in _any_ role.
    * @param {String} [group] Optional. Name of group.  If supplied, limits check
    *                         to just that group.
    *                         The user's Roles.GLOBAL_GROUP will always be checked
-   *                         whether group is specified or not.  
+   *                         whether group is specified or not.
    * @return {Boolean} true if user is in _any_ of the target roles
    */
   userIsInRole: function (user, roles, group) {
@@ -300,7 +300,7 @@ _.extend(Roles, {
       // convert any periods to underscores
       group = group.replace(/\./g, '_')
     }
-    
+
     if ('object' === typeof user) {
       userRoles = user.roles
       if (_.isArray(userRoles)) {
@@ -313,7 +313,7 @@ _.extend(Roles, {
           return _.contains(userRoles[group], role)
         })
         if (!found) {
-          // not found in regular group or group not specified.  
+          // not found in regular group or group not specified.
           // check Roles.GLOBAL_GROUP, if it exists
           found = _.isArray(userRoles[Roles.GLOBAL_GROUP]) && _.some(roles, function (role) {
             return _.contains(userRoles[Roles.GLOBAL_GROUP], role)
@@ -339,8 +339,8 @@ _.extend(Roles, {
     query.$or.push(groupQuery)
 
     if (group) {
-      // structure of query, when group specified including Roles.GLOBAL_GROUP 
-      //   {_id: id, 
+      // structure of query, when group specified including Roles.GLOBAL_GROUP
+      //   {_id: id,
       //    $or: [
       //      {'roles.group1':{$in: ['admin']}},
       //      {'roles.__global_roles__':{$in: ['admin']}}
@@ -349,9 +349,9 @@ _.extend(Roles, {
       groupQuery['roles.'+group] = {$in: roles}
       query.$or.push(groupQuery)
     } else {
-      // structure of query, where group not specified. includes 
-      // Roles.GLOBAL_GROUP 
-      //   {_id: id, 
+      // structure of query, where group not specified. includes
+      // Roles.GLOBAL_GROUP
+      //   {_id: id,
       //    $or: [
       //      {roles: {$in: ['admin']}},
       //      {'roles.__global_roles__': {$in: ['admin']}}
@@ -416,15 +416,15 @@ _.extend(Roles, {
   },
 
   /**
-   * Retrieve all users who are in target role.  
+   * Retrieve all users who are in target role.
    *
    * NOTE: This is an expensive query; it performs a full collection scan
-   * on the users collection since there is no index set on the 'roles' field.  
-   * This is by design as most queries will specify an _id so the _id index is 
+   * on the users collection since there is no index set on the 'roles' field.
+   * This is by design as most queries will specify an _id so the _id index is
    * used automatically.
    *
    * @method getUsersInRole
-   * @param {Array|String} role Name of role/permission.  If array, users 
+   * @param {Array|String} role Name of role/permission.  If array, users
    *                            returned will have at least one of the roles
    *                            specified but need not have _all_ roles.
    * @param {String} [group] Optional name of group to restrict roles to.
@@ -440,7 +440,7 @@ _.extend(Roles, {
 
     // ensure array to simplify query logic
     if (!_.isArray(roles)) roles = [roles]
-    
+
     if (group) {
       if ('string' !== typeof group)
         throw new Error ("Roles error: Invalid parameter 'group'. Expected 'string' type")
@@ -459,7 +459,7 @@ _.extend(Roles, {
     query.$or.push(groupQuery)
 
     if (group) {
-      // structure of query, when group specified including Roles.GLOBAL_GROUP 
+      // structure of query, when group specified including Roles.GLOBAL_GROUP
       //   {
       //    $or: [
       //      {'roles.group1':{$in: ['admin']}},
@@ -469,8 +469,8 @@ _.extend(Roles, {
       groupQuery['roles.'+group] = {$in: roles}
       query.$or.push(groupQuery)
     } else {
-      // structure of query, where group not specified. includes 
-      // Roles.GLOBAL_GROUP 
+      // structure of query, where group not specified. includes
+      // Roles.GLOBAL_GROUP
       //   {
       //    $or: [
       //      {roles: {$in: ['admin']}},
@@ -480,8 +480,8 @@ _.extend(Roles, {
     }
 
     return Meteor.users.find(query, options);
-  },  // end getUsersInRole 
-  
+  },  // end getUsersInRole
+
   /**
    * Retrieve users groups, if any
    *
@@ -493,7 +493,7 @@ _.extend(Roles, {
    */
   getGroupsForUser: function (user, role) {
     var userGroups = [];
-    
+
     if (!user) return []
     if (role) {
       if ('string' !== typeof role) return []
@@ -507,7 +507,7 @@ _.extend(Roles, {
       user = Meteor.users.findOne(
                {_id: user},
                {fields: {roles: 1}})
-    
+
     }else if ('object' !== typeof user) {
       // invalid user object
       return []
@@ -534,7 +534,7 @@ _.extend(Roles, {
    * Private function 'template' that uses $set to construct an update object
    * for MongoDB.  Passed to _updateUserRoles
    *
-   * @method _update_$set_fn 
+   * @method _update_$set_fn
    * @protected
    * @param {Array} roles
    * @param {String} [group]
@@ -553,13 +553,13 @@ _.extend(Roles, {
     }
 
     return update
-  },  // end _update_$set_fn 
+  },  // end _update_$set_fn
 
   /**
-   * Private function 'template' that uses $addToSet to construct an update 
+   * Private function 'template' that uses $addToSet to construct an update
    * object for MongoDB.  Passed to _updateUserRoles
    *
-   * @method _update_$addToSet_fn  
+   * @method _update_$addToSet_fn
    * @protected
    * @param {Array} roles
    * @param {String} [group]
@@ -578,11 +578,11 @@ _.extend(Roles, {
     }
 
     return update
-  },  // end _update_$addToSet_fn 
+  },  // end _update_$addToSet_fn
 
 
   /**
-   * Internal function that uses the Template pattern to adds or sets roles 
+   * Internal function that uses the Template pattern to adds or sets roles
    * for users.
    *
    * @method _updateUserRoles
@@ -590,14 +590,14 @@ _.extend(Roles, {
    * @param {Array|String} users user id(s) or object(s) with an _id field
    * @param {Array|String} roles name(s) of roles/permissions to add users to
    * @param {String} group Group name. If not null or undefined, roles will be
-   *                         specific to that group.  
+   *                         specific to that group.
    *                         Group names can not start with '$'.
    *                         Periods in names '.' are automatically converted
    *                         to underscores.
-   *                         The special group Roles.GLOBAL_GROUP provides 
+   *                         The special group Roles.GLOBAL_GROUP provides
    *                         a convenient way to assign blanket roles/permissions
-   *                         across all groups.  The roles/permissions in the 
-   *                         Roles.GLOBAL_GROUP group will be automatically 
+   *                         across all groups.  The roles/permissions in the
+   *                         Roles.GLOBAL_GROUP group will be automatically
    *                         included in checks for any group.
    * @param {Function} updateFactory Func which returns an update object that
    *                         will be passed to Mongo.
@@ -662,19 +662,19 @@ _.extend(Roles, {
       }
       return memo
     }, [])
-    
+
     // update all users
     update = updateFactory(roles, group)
-    
+
     try {
       if (Meteor.isClient) {
-        // On client, iterate over each user to fulfill Meteor's 
+        // On client, iterate over each user to fulfill Meteor's
         // 'one update per ID' policy
         _.each(users, function (user) {
           Meteor.users.update({_id: user}, update)
         })
       } else {
-        // On the server we can use MongoDB's $in operator for 
+        // On the server we can use MongoDB's $in operator for
         // better performance
         Meteor.users.update(
           {_id: {$in: users}},
@@ -698,10 +698,13 @@ function isMongoMixError (errorMsg) {
   var expectedMessages = [
       'Cannot apply $addToSet modifier to non-array',
       'Cannot apply $addToSet to a non-array field',
+      'Cannot apply $addToSet to non-array field',
       'Can only apply $pullAll to an array',
       'Cannot apply $pull/$pullAll modifier to non-array',
+      'Cannot apply $pull to a non-array value',
       "can't append to array using string field name",
-      'to traverse the element'
+      'to traverse the element',
+      'Cannot create field'
       ]
 
   return _.some(expectedMessages, function (snippet) {

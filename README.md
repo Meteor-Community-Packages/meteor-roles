@@ -1,5 +1,8 @@
-meteor-roles
-============
+meteor-roles v1
+===============
+
+**This version of the package is being maintained just for security and compatibility issues.
+Please consider the [latest version](https://github.com/Meteor-Community-Packages/meteor-roles).
 
 Authorization package for Meteor - compatible with built-in accounts package.
 
@@ -422,7 +425,7 @@ View the `meteor-router` example app online @  <a href="http://roles.meteor.com/
 
 _Iron Router or Flow Router_
 
-  1. `git clone https://github.com/alanning/meteor-roles.git`
+  1. `git clone https://github.com/Meteor-Community-Packages/meteor-roles.git`
   2. either
     * `cd meteor-roles/examples/iron-router` or
     * `cd meteor-roles/examples/flow-router`
@@ -434,7 +437,7 @@ _Iron Router or Flow Router_
 _Deprecated routing packages: Mini-Pages or Router_
 
   1. install [Meteorite][1]
-  2. `git clone https://github.com/alanning/meteor-roles.git`
+  2. `git clone https://github.com/Meteor-Community-Packages/meteor-roles.git`
   3. either
     * `cd meteor-roles/examples/router` or
     * `cd meteor-roles/examples/mini-pages`
