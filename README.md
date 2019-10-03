@@ -2,7 +2,7 @@ meteor-roles v1
 ===============
 
 **This version of the package is being maintained just for security and compatibility issues.
-Please consider the [latest version](https://github.com/Meteor-Community-Packages/meteor-roles).
+Please consider the [latest version](https://github.com/Meteor-Community-Packages/meteor-roles).**
 
 Authorization package for Meteor - compatible with built-in accounts package.
 
