@@ -57,9 +57,10 @@ _.extend(Roles, {
    *
    * @method createRole
    * @param {String} role Name of role
+   * @param {Boolean} [unlessExists] Optional. If true, existence of a role will not throw an exception.
    * @return {String} id of new role
    */
-  createRole: function (role) {
+  createRole: function (role, unlessExists) {
     var id,
         match
 
@@ -76,7 +77,8 @@ _.extend(Roles, {
       // (from Meteor accounts-base package, insertUserDoc func)
       // XXX string parsing sucks, maybe
       // https://jira.mongodb.org/browse/SERVER-3069 will get fixed one day
-      if (/E11000 duplicate key error.*(index.*roles|roles.*index).*name/.test(e.err || e.errmsg)) {
+      if (/E11000 duplicate key error.*(index.*roles|roles.*index).*name/.test(e.errmsg || e.err)) {
+        if (unlessExists) return null;
         throw new Error("Role '" + role.trim() + "' already exists.")
       }
       else {
@@ -243,7 +245,7 @@ _.extend(Roles, {
       }
     }
     catch (ex) {
-      if (ex.name === 'MongoError' && isMongoMixError(ex.err || ex.errmsg)) {
+      if (ex.name === 'MongoError' && isMongoMixError(ex.errmsg || ex.err)) {
         throw new Error (mixingGroupAndNonGroupErrorMsg)
       }
 
@@ -639,15 +641,22 @@ _.extend(Roles, {
     //if (roles.length === 0) return
 
     // ensure all roles exist in 'roles' collection
-    existingRoles = _.reduce(Meteor.roles.find({}).fetch(), function (memo, role) {
-      memo[role.name] = true
-      return memo
-    }, {})
-    _.each(roles, function (role) {
-      if (!existingRoles[role]) {
-        Roles.createRole(role)
-      }
-    })
+    if (Meteor.isClient) {
+      existingRoles = _.reduce(Meteor.roles.find({}).fetch(), function (memo, role) {
+        memo[role.name] = true
+        return memo
+      }, {})
+      _.each(roles, function (role) {
+        if (!existingRoles[role]) {
+          Roles.createRole(role)
+        }
+      })
+    }
+    else {
+      _.each(roles, function (role) {
+        Roles.createRole(role, true)
+      })
+    }
 
     // ensure users is an array of user ids
     users = _.reduce(users, function (memo, user) {
@@ -683,7 +692,7 @@ _.extend(Roles, {
       }
     }
     catch (ex) {
-      if (ex.name === 'MongoError' && isMongoMixError(ex.err || ex.errmsg)) {
+      if (ex.name === 'MongoError' && isMongoMixError(ex.errmsg || ex.err)) {
         throw new Error (mixingGroupAndNonGroupErrorMsg)
       }
 

@@ -1,3 +1,9 @@
+## v1.2.18
+
+* Added `unlessExists` to `createRole` to allow not throwing an exception if a role already exists.
+  Also handle a race condition when creating roles internally if they already exist.
+* Moved `package.js` to the top of the repository so that it is easier to include it as a git submodule.
+
 ## v1.2.17
 
 * Bumped for use with latest Meteor version, 1.8.1.
