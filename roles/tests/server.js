@@ -1025,6 +1025,8 @@
       test.isFalse(Roles.userIsInRole(users.eve, []))
       test.isFalse(Roles.userIsInRole(users.eve, null))
       test.isFalse(Roles.userIsInRole(users.eve, undefined))
+
+      test.isFalse(Roles.userIsInRole(users.eve, ["Role1", "Role2", undefined]))
     });
 
   Tinytest.add(
