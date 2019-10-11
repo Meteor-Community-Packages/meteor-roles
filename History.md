@@ -1,4 +1,4 @@
-## vNEXT
+## v1.2.19
 
 * Fixed `getGroupsForUser` to work with `.` in a role name.
   [#236](https://github.com/Meteor-Community-Packages/meteor-roles/issues/236)
