@@ -1027,6 +1027,17 @@
       test.isFalse(Roles.userIsInRole(users.eve, undefined))
     });
 
+  Tinytest.add(
+    'roles - dot in role name in getGroupsForUser',
+    function (test) {
+      reset();
+
+      Roles.createRole('users.view')
+      Roles.addUsersToRoles(users.eve, 'users.view', 'b')
+      test.equal(Roles.getGroupsForUser(users.eve, 'users.view'), ['b'])
+    });
+
+
   function printException (ex) {
     var tmp = {}
     for (var key in ex) {

@@ -1,3 +1,8 @@
+## vNEXT
+
+* Fixed `getGroupsForUser` to work with `.` in a role name.
+  [#236](https://github.com/Meteor-Community-Packages/meteor-roles/issues/236)
+
 ## v1.2.18
 
 * Added `unlessExists` to `createRole` to allow not throwing an exception if a role already exists.
