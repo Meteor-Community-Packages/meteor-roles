@@ -2,7 +2,7 @@
 
 Package.describe({
   summary: 'Authorization package for Meteor',
-  version: '2.0.1',
+  version: '2.1.0',
   git: 'https://github.com/Meteor-Community-Packages/meteor-roles.git',
   name: 'alanning:roles'
 })
@@ -48,8 +48,6 @@ Package.onTest(function (api) {
   api.versionsFrom('METEOR@1.8.1')
 
   var both = ['client', 'server']
-
-  // `accounts-password` is included so `Meteor.users` exists
 
   api.use([
     'ecmascript',
