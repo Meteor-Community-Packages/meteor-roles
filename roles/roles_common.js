@@ -822,6 +822,7 @@ Object.assign(Roles, {
     }
 
     if (!id) return false
+    if (typeof id !== 'string') return false
 
     if (options.anyScope) {
       query = {
