@@ -1,3 +1,7 @@
+## v2.1.1
+
+* Function `userIsInRole` should return false if a function is given as user [#324](https://github.com/Meteor-Community-Packages/meteor-roles/pull/324)([@Floriferous](https://github.com/Floriferous))
+
 ## v2.1.0
 
 * Added `isParentOf` to check if roles are nested [#290](https://github.com/Meteor-Community-Packages/meteor-roles/issues/290)
