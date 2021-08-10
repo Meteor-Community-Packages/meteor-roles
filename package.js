@@ -2,25 +2,25 @@
 
 Package.describe({
   summary: 'Authorization package for Meteor',
-  version: '2.1.1',
+  version: '2.2.0',
   git: 'https://github.com/Meteor-Community-Packages/meteor-roles.git',
   name: 'alanning:roles'
 })
 
 Package.onUse(function (api) {
-  api.versionsFrom('METEOR@1.8.1')
+  api.versionsFrom('1.9')
 
   var both = ['client', 'server']
 
   api.use([
     'ecmascript',
-    'accounts-base',
+    'accounts-base@1.9.0 || 2.0.0',
     'tracker',
     'mongo',
     'check'
   ], both)
 
-  api.use(['blaze@2.3.3'], 'client', { weak: true })
+  api.use(['blaze@2.5.0'], 'client', { weak: true })
 
   api.export('Roles')
 
@@ -45,7 +45,7 @@ Package.onTest(function (api) {
     'chai': '4.2.0'
   })
 
-  api.versionsFrom('METEOR@1.8.1')
+  api.versionsFrom('1.9')
 
   var both = ['client', 'server']
 

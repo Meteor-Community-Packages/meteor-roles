@@ -1,3 +1,11 @@
+# Changelog
+
+## v2.2.0
+
+* Make compatible both with v1.9 and v2 of `accounts-base`
+* Raised `versionsFrom` to Meteor v1.9
+* Blaze updated to v2.5
+
 ## v2.1.1
 
 * Function `userIsInRole` should return false if a function is given as user [#324](https://github.com/Meteor-Community-Packages/meteor-roles/pull/324)([@Floriferous](https://github.com/Floriferous))
