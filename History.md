@@ -1,3 +1,11 @@
+# Changelog
+
+## v1.3.0
+
+* Make compatible both with v1.9 and v2 of `accounts-base`
+* Raised `versionsFrom` to Meteor v1.9
+* Blaze updated to v2.5
+
 ## v1.2.19
 
 * Fixed `getGroupsForUser` to work with `.` in a role name.
