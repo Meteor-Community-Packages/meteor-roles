@@ -1,20 +1,18 @@
 name: GitHub Actions Demo
-on: 
-  pull_request:
-    branches: [ master ]
-  workflow_dispatch:
+
 jobs:
-  perform-example-action:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-20.04
+    name: Meteor 2.2 tests
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      - uses: actions/checkout@v2
+
+      - name: install Meteor 2.2
+        uses: meteorengineer/setup-meteor@v1
+        with:
+          meteor-release: 2.2
+
+      - name: test package
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+         npm ci
+         npm test
