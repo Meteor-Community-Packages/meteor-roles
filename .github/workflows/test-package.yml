@@ -8,14 +8,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
-    name: Meteor 2.2 tests
+    name: Meteor 2.3 tests
     steps:
       - uses: actions/checkout@v2
 
-      - name: install Meteor 2.2
+      - name: install Meteor 2.3
         uses: meteorengineer/setup-meteor@v1
         with:
-          meteor-release: 2.2
+          meteor-release: 2.3
 
       - name: test package
         run: npm test
