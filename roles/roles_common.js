@@ -24,12 +24,17 @@
  *
  * @module Roles
  */
+
+export const RolesCollection = new Mongo.Collection('roles')
+
 if (!Meteor.roles) {
-  Meteor.roles = new Mongo.Collection('roles')
+  Meteor.roles = RolesCollection
 }
 
+export const RoleAssignmentCollection = new Mongo.Collection('role-assignment')
+
 if (!Meteor.roleAssignment) {
-  Meteor.roleAssignment = new Mongo.Collection('role-assignment')
+  Meteor.roleAssignment = RoleAssignmentCollection
 }
 
 /**
