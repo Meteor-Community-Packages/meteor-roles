@@ -396,6 +396,17 @@ declare namespace Roles {
     options?: string | { scope?: string; anyScope?: boolean }
   ): Promise<boolean>
 
+  /**
+   * Check if current user is in at least one of the target roles.
+   * @method isInRole
+   * @param {String} role Name of role or comma-seperated list of roles.
+   * @param {String} [scope] Optional, name of scope to check.
+   * @return {Boolean} `true` if current user is in at least one of the target roles.
+   * @static
+   */
+  function isInRole(role: string, scope: string[]): boolean
+  function isInRoleAsync(role: string, scope: string[]): Promise<boolean>
+
   // The schema for the roles collection
   interface Role {
     _id: string
