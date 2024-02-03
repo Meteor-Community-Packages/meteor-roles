@@ -1,6 +1,7 @@
 /* global Roles */
 import { Meteor } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
+import { Match } from 'meteor/check'
 
 /**
  * Provides functions related to user authorization. Compatible with built-in Meteor accounts packages.
