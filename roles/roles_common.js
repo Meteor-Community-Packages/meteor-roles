@@ -652,10 +652,10 @@ Object.assign(Roles, {
    *   - `anyScope`: if set, role can be in any scope (`scope` option is ignored)
    *
    * Alternatively, it can be a scope name string.
-   * @return {Boolean} `true` if user is in _any_ of the target roles
+   * @return {Promise<Boolean>} `true` if user is in _any_ of the target roles
    * @static
    */
-  userIsInRole: function (user, roles, options) {
+  userIsInRole: async function (user, roles, options) {
     let id
     options = Roles._normalizeOptions(options)
 
@@ -687,11 +687,13 @@ Object.assign(Roles, {
       selector.scope = { $in: [options.scope, null] }
     }
 
-    return roles.some((roleName) => {
+    const promises = roles.map((roleName) => {
       selector['inheritedRoles._id'] = roleName
 
-      return Meteor.roleAssignment.find(selector, { limit: 1 }).count() > 0
+      return Meteor.roleAssignment.find(selector, { limit: 1 }).countAsync() > 0
     })
+    await Promise.all(promises)
+    return promises.some(p => p)
   },
 
   /**
