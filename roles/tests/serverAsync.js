@@ -6,8 +6,7 @@ import chai, { assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 // To ensure that the files are loaded for coverage
-import '../roles_server'
-import '../roles_common'
+import '../roles_common_async'
 
 chai.use(chaiAsPromised)
 
@@ -1485,7 +1484,7 @@ describe('roles async', async function () {
       inheritedRoles: [{ _id: 'admin' }]
     }])
 
-    Roles._removeUserFromRole(users.eve, 'admin', { scope: null })
+    await Roles._removeUserFromRoleAsync(users.eve, 'admin', { scope: null })
 
     const rolesForUser2 = await Roles.getRolesForUserAsync(users.eve, { anyScope: true, fullObjects: true })
     assert.sameDeepMembers(rolesForUser2.map(obj => { delete obj._id; return obj }), [])
