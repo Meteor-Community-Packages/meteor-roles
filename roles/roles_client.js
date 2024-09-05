@@ -1,12 +1,11 @@
 /* global Roles */
 import { Meteor } from 'meteor/meteor'
-import { Mongo } from 'meteor/mongo'
 import { Match } from 'meteor/check'
 
 /**
  * Provides functions related to user authorization. Compatible with built-in Meteor accounts packages.
  *
- * Roles are accessible throgh `Meteor.roles` collection and documents consist of:
+ * Roles are accessible through `Meteor.roles` collection and documents consist of:
  *  - `_id`: role name
  *  - `children`: list of subdocuments:
  *    - `_id`
@@ -17,7 +16,7 @@ import { Match } from 'meteor/check'
  *
  * Example: `{_id: 'admin', children: [{_id: 'editor'}]}`
  *
- * The assignment of a role to a user is stored in a collection, accessible through `Meteor.roleAssignment`.
+ * The assignment of a role to a user is stored in a collection, accessible through `RoleAssignmentCollection`.
  * It's documents consist of
  *  - `_id`: Internal MongoDB id
  *  - `role`: A role object which got assigned. Usually only contains the `_id` property
@@ -27,13 +26,6 @@ import { Match } from 'meteor/check'
  *
  * @module Roles
  */
-if (!Meteor.roles) {
-  Meteor.roles = new Mongo.Collection('roles')
-}
-
-if (!Meteor.roleAssignment) {
-  Meteor.roleAssignment = new Mongo.Collection('role-assignment')
-}
 
 /**
  * @class Roles
@@ -106,7 +98,7 @@ Object.assign(Roles, {
       // For all roles who have it as a dependency ...
       roles = Roles._getParentRoleNames(Meteor.roles.findOne({ _id: roleName }))
 
-      Meteor.roles.find({ _id: { $in: roles } }).fetch().forEach(r => {
+      for (const r of Meteor.roles.find({ _id: { $in: roles } }).fetch()) {
         Meteor.roles.update({
           _id: r._id
         }, {
@@ -125,7 +117,7 @@ Object.assign(Roles, {
             inheritedRoles: [r._id, ...inheritedRoles].map(r2 => ({ _id: r2 }))
           }
         }, { multi: true })
-      })
+      }
     } while (roles.length > 0)
 
     // And finally remove the role itself
@@ -206,9 +198,9 @@ Object.assign(Roles, {
     // ensure arrays
     if (!Array.isArray(rolesNames)) rolesNames = [rolesNames]
 
-    rolesNames.forEach(function (roleName) {
+    for (const roleName of rolesNames) {
       Roles._addRoleToParent(roleName, parentName)
-    })
+    }
   },
 
   /**
@@ -275,9 +267,9 @@ Object.assign(Roles, {
     // ensure arrays
     if (!Array.isArray(rolesNames)) rolesNames = [rolesNames]
 
-    rolesNames.forEach(function (roleName) {
+    for (const roleName of rolesNames) {
       Roles._removeRoleFromParent(roleName, parentName)
-    })
+    }
   },
 
   /**
@@ -316,7 +308,7 @@ Object.assign(Roles, {
     // For all roles who have had it as a dependency ...
     const roles = [...Roles._getParentRoleNames(Meteor.roles.findOne({ _id: parentName })), parentName]
 
-    Meteor.roles.find({ _id: { $in: roles } }).fetch().forEach(r => {
+    for (const r of Meteor.roles.find({ _id: { $in: roles } }).fetch()) {
       const inheritedRoles = Roles._getInheritedRoleNames(Meteor.roles.findOne({ _id: r._id }))
       Meteor.roleAssignment.update({
         'role._id': r._id,
@@ -326,7 +318,7 @@ Object.assign(Roles, {
           inheritedRoles: [r._id, ...inheritedRoles].map(r2 => ({ _id: r2 }))
         }
       }, { multi: true })
-    })
+    }
   },
 
   /**
@@ -368,17 +360,17 @@ Object.assign(Roles, {
       ifExists: false
     }, options)
 
-    users.forEach(function (user) {
+    for (const user of users) {
       if (typeof user === 'object') {
         id = user._id
       } else {
         id = user
       }
 
-      roles.forEach(function (role) {
+      for (const role of roles) {
         Roles._addUserToRole(id, role, options)
-      })
-    })
+      }
+    }
   },
 
   /**
@@ -422,7 +414,7 @@ Object.assign(Roles, {
       anyScope: false
     }, options)
 
-    users.forEach(function (user) {
+    for (const user of users) {
       if (typeof user === 'object') {
         id = user._id
       } else {
@@ -437,10 +429,10 @@ Object.assign(Roles, {
       Meteor.roleAssignment.remove(selector)
 
       // and then add all
-      roles.forEach(function (role) {
+      for (const role of roles) {
         Roles._addUserToRole(id, role, options)
-      })
-    })
+      }
+    }
   },
 
   /**
@@ -515,11 +507,11 @@ Object.assign(Roles, {
 
     const parentRoles = new Set([role._id])
 
-    parentRoles.forEach(roleName => {
+    for (const roleName of parentRoles) {
       Meteor.roles.find({ 'children._id': roleName }).fetch().forEach(parentRole => {
         parentRoles.add(parentRole._id)
       })
-    })
+    }
 
     parentRoles.delete(role._id)
 
@@ -541,14 +533,14 @@ Object.assign(Roles, {
     const inheritedRoles = new Set()
     const nestedRoles = new Set([role])
 
-    nestedRoles.forEach(r => {
+    for (const r of nestedRoles) {
       const roles = Meteor.roles.find({ _id: { $in: r.children.map(r => r._id) } }, { fields: { children: 1 } }).fetch()
 
-      roles.forEach(r2 => {
+      for (const r2 of roles) {
         inheritedRoles.add(r2._id)
         nestedRoles.add(r2)
-      })
-    })
+      }
+    }
 
     return [...inheritedRoles]
   },
@@ -583,10 +575,10 @@ Object.assign(Roles, {
 
     Roles._checkScopeName(options.scope)
 
-    users.forEach(function (user) {
-      if (!user) return
+    for (const user of users) {
+      if (!user) continue
 
-      roles.forEach(function (role) {
+      for (const role of roles) {
         let id
         if (typeof user === 'object') {
           id = user._id
@@ -595,8 +587,8 @@ Object.assign(Roles, {
         }
 
         Roles._removeUserFromRole(id, role, options)
-      })
-    })
+      }
+    }
   },
 
   /**
@@ -778,7 +770,7 @@ Object.assign(Roles, {
    *
    * @method getAllRoles
    * @param {Object} queryOptions Options which are passed directly
-   *                                through to `Meteor.roles.find(query, options)`.
+   *                                through to `RolesCollection.find(query, options)`.
    * @return {Cursor} Cursor of existing roles.
    * @static
    */
@@ -833,7 +825,7 @@ Object.assign(Roles, {
    *     roles will also be checked
    *   - `anyScope`: if set, role can be in any scope (`scope` option is ignored)
    *   - `queryOptions`: options which are passed directly
-   *     through to `Meteor.roleAssignment.find(query, options)`
+   *     through to `RoleAssignmentCollection.find(query, options)`
    *
    * Alternatively, it can be a scope name string.
    * @return {Cursor} Cursor of user assignments for roles.
@@ -863,7 +855,7 @@ Object.assign(Roles, {
    *
    * Alternatively, it can be a scope name string.
    * @param {Object} [filter] Options which are passed directly
-   *                                through to `Meteor.roleAssignment.find(query, options)`
+   *                                through to `RoleAssignmentCollection.find(query, options)`
    * @return {Object} Cursor to the assignment documents
    * @private
    * @static
@@ -1135,8 +1127,12 @@ Object.assign(Roles, {
   _checkScopeName: function (scopeName) {
     if (scopeName === null) return
 
-    if (!scopeName || typeof scopeName !== 'string' || scopeName.trim() !== scopeName) {
-      throw new Error('Invalid scope name \'' + scopeName + '\'.')
+    if (
+      !scopeName ||
+      typeof scopeName !== 'string' ||
+      scopeName.trim() !== scopeName
+    ) {
+      throw new Error(`Invalid scope name '${scopeName}'.`)
     }
   }
 })
