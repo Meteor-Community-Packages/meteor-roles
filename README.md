@@ -286,7 +286,7 @@ for (const user of users) {
     profile: { name: user.name }
   });
 
-  const count = await Meteor.roleAssignment.coundDocuments({ 'user._id': id })
+  const count = await Meteor.roleAssignment.countDocuments({ 'user._id': id })
   if (count === 0) {
     import { Roles } from 'meteor/alanning:roles';
     
