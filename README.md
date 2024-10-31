@@ -426,8 +426,6 @@ To check for permissions when using groups:
 <a id="roles-docs" name="roles-docs"></a>
 ### API Docs
 
-Online API docs found here: http://alanning.github.io/meteor-roles/classes/Roles.html
-
 API docs generated using [YUIDoc][2]
 
 To re-generate documentation:
@@ -507,4 +505,4 @@ Step 2 needs to be run in the main 'meteor-roles' directory and the './' is need
 
 [1]: https://github.com/oortcloud/meteorite "Meteorite"
 
-[2]: http://yui.github.com/yuidoc/ "YUIDoc"
+[2]: https://yui.github.io/yuidoc "YUIDoc"
