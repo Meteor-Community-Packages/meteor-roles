@@ -1,6 +1,7 @@
 /* global Roles */
 import { Meteor } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
+import { Match } from 'meteor/check'
 
 /**
  * Provides functions related to user authorization. Compatible with built-in Meteor accounts packages.
@@ -1263,6 +1264,41 @@ Object.assign(Roles, {
     }
 
     return false
+  },
+
+  /**
+   * Check if current user is in at least one of the target roles.
+   * @method isInRoleAsync
+   * @param {String} role Name of role or comma-seperated list of roles.
+   * @param {String} [scope] Optional, name of scope to check.
+   * @return {Promise} `true` if current user is in at least one of the target roles.
+   * @static
+   */
+  isInRoleAsync: async function (role, scope) {
+    const userId = Meteor.userId()
+    const comma = (role || '').indexOf(',')
+    let roles
+
+    if (!userId) return false
+    if (!Match.test(role, String)) return false
+
+    if (comma !== -1) {
+      roles = role.split(',').reduce(function (memo, r) {
+        if (!r) {
+          return memo
+        }
+        memo.push(r)
+        return memo
+      }, [])
+    } else {
+      roles = [role]
+    }
+
+    if (Match.test(scope, String)) {
+      return await this.userIsInRoleAsync(userId, roles, scope)
+    }
+
+    return await this.userIsInRoleAsync(userId, roles)
   },
 
   /**
