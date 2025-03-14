@@ -1,6 +1,6 @@
-meteor-roles v3
+meteor-roles v4
 ===============
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Project Status: Moved – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/moved.svg)]([https://www.repostatus.org/#active](https://github.com/meteor/meteor/tree/devel/packages/roles))
 ![GitHub](https://img.shields.io/github/license/Meteor-Community-Packages/meteor-roles)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![CodeQL](https://github.com/Meteor-Community-Packages/meteor-roles/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/Meteor-Community-Packages/meteor-roles/actions/workflows/github-code-scanning/codeql)
@@ -8,6 +8,13 @@ meteor-roles v3
 [![](https://img.shields.io/badge/semver-2.0.0-success)](http://semver.org/spec/v2.0.0.html) 
 
 Authorization package for Meteor - compatible with built-in accounts package.
+
+> [!WARNING] 
+> **This package has been included in [Meteor core packages](https://github.com/meteor/meteor/tree/devel/packages/roles) from Meteor 3.1.0 as package `roles`**
+> 
+> The up-to-date documentation is [in Meteor V3 Docs](https://v3-docs.meteor.com/packages/roles.html)
+>
+> Only critical fixes will be backported to this repository and publish for `alanning:roles` for v4
 
 There are also older versions of this package:
 * [v1](https://github.com/Meteor-Community-Packages/meteor-roles/tree/v1)
