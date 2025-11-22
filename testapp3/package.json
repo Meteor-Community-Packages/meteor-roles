@@ -11,7 +11,7 @@
     "lint:fix": "standard --fix ../"
   },
   "dependencies": {
-    "@babel/runtime": "^7.25.6",
+    "@babel/runtime": "^7.26.10",
     "meteor-node-stubs": "^1.2.9"
   },
   "devDependencies": {
