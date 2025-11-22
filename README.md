@@ -213,6 +213,7 @@ Here is a full list of new async functions:
   * userIsInRoleAsync
   * getRolesForUserAsync
   * getUsersInRoleAsync
+  * getUserIdsInRoleAsync
   * getGroupsForUserAsync
   * getScopesForUserAsync
   * renameScopeAsync
