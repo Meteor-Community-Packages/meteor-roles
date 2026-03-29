@@ -11,16 +11,16 @@
     "lint:fix": "standard --fix ../"
   },
   "dependencies": {
-    "@babel/runtime": "^7.26.10",
-    "meteor-node-stubs": "^1.2.9"
+    "@babel/runtime": "^7.29.2",
+    "meteor-node-stubs": "^1.2.27"
   },
   "devDependencies": {
-    "babel-plugin-istanbul": "^6.1.1",
-    "chai": "^4.5.0",
-    "chai-as-promised": "^7.1.2",
-    "nyc": "^15.1.0",
-    "puppeteer": "^23.3.0",
-    "standard": "^17.1.0"
+    "babel-plugin-istanbul": "^7.0.1",
+    "chai": "^6.2.2",
+    "chai-as-promised": "^8.0.2",
+    "nyc": "^18.0.0",
+    "puppeteer": "^24.40.0",
+    "standard": "^17.1.2"
   },
   "babel": {
     "env": {
